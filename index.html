@@ -139,11 +139,12 @@
 		</div>
 	</section>
 
-	<section id="video-bg" class="posr">
+	<section id="video-bg" class="posr fullsize-video-bg">
 
-		<div class="cover">
+		<div class="cover inner">
 			<div class="container flex half_wrapper">
 				<div class="col-md-6 col-sm-8">
+					<span onclick="openFullscreen();" class="video-expand" target="_blank"><div class="play_tube"><img src="assets/img/play_youtube.png" alt="play" /><span>Դիտել</span></div></a>
 					<h2 class="bold-text">Մի դրամի ուժը</h2>
 					<p>«Մի դրամի ուժը» Իդրամ ընկերության ԿՍՊ ծրագիրն է, որն ուղղված է աջակցելու Հայաստանում կենսական և ռազմավարական կարևորություն ունեցող մի շարք ոլորտների զարգացմանը՝ առողջապահություն, կրթություն, կանաչ տնտեսություն, միջավայրի պահպանություն, սոցիալական պատասխանատվություն և հանրային անվտանգություն։</p>
 					<div class="flex"><a class="btn" href="details-hy.html">իմանալ ավելին</a></div>
@@ -154,29 +155,30 @@
 			</div>
 		</div>
 
-<!-- 		<style>
-			#video-bg {
-			    overflow: hidden;
-			    width: 100%;
-			}
-			video {
-			    height: 100%;
-			    width: 266.667vh; /* 100 * 24 / 9 */
-			    min-width: 100%;
-			    min-height: 37.5vw; /* 100 * 9 / 24 */
-			}
+		<style>
+			#video-viewport { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; }
+			.video-adaptive { display: block; width: 100%; height: auto; }
+
+			.fullsize-video-bg { height: 100%; overflow: hidden; }
+
+			.fullsize-video-bg:before { content: ""; background: rgba(114,45,0,.35); position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+			.fullsize-video-bg:after { content: ""; background-color: #00000050; background-size: 3px 3px; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+
+
+			.fullsize-video-bg .inner { display: table; width: 100%; max-width: 24em; height: 100%; margin: 0 auto; padding: 0; position: relative; z-index: 2; text-shadow: 0 1px 5px rgba(0,0,0,.5); }
+			.fullsize-video-bg .inner > div { text-align: center; display: table-cell; vertical-align: middle; padding: 0 2em; }
 		</style>
-		<video webkit-playsinline autoplay id="html-video">
+		<video id="html-video" class="video-adaptive" width="1920" height="720" webkit-playsinline autoplay muted loop>
 		  <source src="assets/img/video.mp4" type="video/mp4">
 		  Your browser does not support the video tag.
-		</video> -->
+		</video>
 
-		<div class="video-wrapper" data-video-id="D8Sj8KWkS3E" data-video-youtube-link="y" data-video-start="0" data-video-end="71" data-video-width-add="100" data-video-height-add="100">
+<!-- 		<div class="video-wrapper" data-video-id="D8Sj8KWkS3E" data-video-youtube-link="y" data-video-start="0" data-video-end="71" data-video-width-add="100" data-video-height-add="100">
 			<div class="video-overlay" style="background-color: #000; opacity: .50"></div>
 			<div class="tv">
 			    <div class="screen mute" id="tv"></div>
 			</div>
-		</div>
+		</div> -->
 	</section>
 
 	<section id="power-1dram" class="light-bg p206">
@@ -417,61 +419,38 @@
 		
 	</script>
 	<script>
-		// Grab data attributes from video-wrapper
-		var videoID = $(".video-wrapper").data("video-id");
-		var videoYouTubeLink = $(".video-wrapper").data("video-youtube-link");
-		var videoStart = $(".video-wrapper").data("video-start");
-		var videoEnd = $(".video-wrapper").data("video-end");
-		var videoWidthAdd = $(".video-wrapper").data("video-width-add");
-		var videoHeightAdd = $(".video-wrapper").data("video-height-add");
+		var min_w = 300;
+		var vid_w_orig;
+		var vid_h_orig;
 
-		// Create video script element
-		var tag = document.createElement('script');
-		  tag.src = 'https://www.youtube.com/player_api';
-		var firstScriptTag = document.getElementsByTagName('script')[0];
-		  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+		$(function() {
 
-		// Prepend expander if data attr is yes
-		if (videoYouTubeLink === 'y') {
-		  $("#video-bg .cover .container").prepend('<span onclick="openFullscreen();"" data-href="https://www.youtube.com/watch?v=' + videoID + '" class="video-expand" target="_blank"><div class="play_tube"><img src="assets/img/play_youtube.png" alt="play" /><span>Play</span></div></a>');
-		}
+		    vid_w_orig = parseInt($('video').attr('width'));
+		    vid_h_orig = parseInt($('video').attr('height'));
 
-		// Setup the Youtube TV with player defaults
-		var tv,
-		  playerDefaults = {autoplay: 1, autohide: 1, modestbranding: 1, rel: 0, showinfo: 0, controls: 0, disablekb: 1, enablejsapi: 0, iv_load_policy: 3};
-		var vid = {'videoId': videoID, 'startSeconds': videoStart, 'endSeconds': videoEnd, 'suggestedQuality': 'hd720'};
+		    $(window).resize(function () { fitVideo(); });
+		    $(window).trigger('resize');
 
-		function onYouTubePlayerAPIReady(){
-		  tv = new YT.Player('tv', {events: {'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange}, playerVars: playerDefaults});
-		}
-
-		function onPlayerReady(){
-		  tv.loadVideoById(vid);
-		  tv.mute();
-		}
-
-		function onPlayerStateChange(e) {
-		  if (e.data === 1){
-		    $('#tv').addClass('active');
-		  } else if (e.data === 0){
-		    tv.seekTo(vid.startSeconds)
-		  }
-		}
-
-		function vidRescale(){
-		  var w = $(window).width() + videoWidthAdd,
-		    h = $(window).height() + videoHeightAdd;
-		  if (w/h > 16/9){
-		    tv.setSize(w, w/16*9);
-		    $('.tv .screen').css({'left': '0px'});
-		  } else {
-		    tv.setSize(h/9*16, h);
-		    $('.tv .screen').css({'left': -($('.tv .screen').outerWidth()-w)/2});
-		  }
-		}
-		$(window).on('load resize', function(){
-		  vidRescale();
 		});
+
+		function fitVideo() {
+
+		    $('#video-viewport').width($('.fullsize-video-bg').width());
+		    $('#video-viewport').height($('.fullsize-video-bg').height());
+
+		    var scale_h = $('.fullsize-video-bg').width() / vid_w_orig;
+		    var scale_v = $('.fullsize-video-bg').height() / vid_h_orig;
+		    var scale = scale_h > scale_v ? scale_h : scale_v;
+
+		    if (scale * vid_w_orig < min_w) {scale = min_w / vid_w_orig;};
+
+		    $('.video-adaptive').width(scale * vid_w_orig);
+		    $('.video-adaptive').height(scale * vid_h_orig);
+
+		    $('#video-viewport').scrollLeft(($('.video-adaptive').width() - $('.fullsize-video-bg').width()) / 2);
+		    $('#video-viewport').scrollTop(($('.video-adaptive').height() - $('.fullsize-video-bg').height()) / 2);
+
+		};
 
 		var elem = document.getElementById("html-video");
 		function openFullscreen() {
