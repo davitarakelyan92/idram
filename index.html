@@ -439,24 +439,19 @@
 		// Setup the Youtube TV with player defaults
 		var tv,
 		  playerDefaults = {autoplay: 1, playsinline: 1, muted: 1, autohide: 1, modestbranding: 1, rel: 0, showinfo: 0, controls: 0, disablekb: 1, enablejsapi: 0, iv_load_policy: 3};
-		var vid = {'videoId': videoID, 'startSeconds': videoStart, 'endSeconds': videoEnd, 'suggestedQuality': 'hd720'};
+		
 
-		function onYouTubePlayerAPIReady(){
-		  tv = new YT.Player('tv', {events: {'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange}, playerVars: playerDefaults});
+		function onYouTubeIframeAPIReady(){
+		  tv = new YT.Player('tv', {
+			  videoID: videoID,
+			  events: {'onReady': onPlayerReady},
+			  playerVars: {'autoplay': 1, 'playsinline': 1}.
+		  });
 		}
 
-		function onPlayerReady(){
-		  tv.loadVideoById(vid);
-		  tv.mute();
-			tv.playVideo();
-		}
-
-		function onPlayerStateChange(e) {
-		  if (e.data === 1){
-		    $('#tv').addClass('active');
-		  } else if (e.data === 0){
-		    tv.seekTo(vid.startSeconds)
-		  }
+		function onPlayerReady(e){
+			e.target.mute();
+			e.target.playVideo();
 		}
 
 		function vidRescale(){
