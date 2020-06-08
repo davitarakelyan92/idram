@@ -433,25 +433,29 @@
 
 		// Prepend expander if data attr is yes
 		if (videoYouTubeLink === 'y') {
-		  $("#video-bg .cover .container").prepend('<span onclick="openFullscreen();"" data-href="https://www.youtube.com/watch?v=' + videoID + '" class="video-expand" target="_blank"><div class="play_tube"><img src="assets/img/play_youtube.png" alt="play" /><span>Դիտել</span></div></a>');
+		  $("#video-bg .cover .container").prepend('<span onclick="openFullscreen();"" data-href="https://www.youtube.com/watch?v=' + videoID + '" class="video-expand" target="_blank"><div class="play_tube"><img src="assets/img/play_youtube.png" alt="play" /><span>Play</span></div></a>');
 		}
 
 		// Setup the Youtube TV with player defaults
 		var tv,
-		  playerDefaults = {autoplay: 1, playsinline: 1, muted: 1, autohide: 1, modestbranding: 1, rel: 0, showinfo: 0, controls: 0, disablekb: 1, enablejsapi: 0, iv_load_policy: 3};
-		
+		  playerDefaults = {autoplay: 1, autohide: 1, modestbranding: 1, rel: 0, showinfo: 0, controls: 0, disablekb: 1, enablejsapi: 0, iv_load_policy: 3};
+		var vid = {'videoId': videoID, 'startSeconds': videoStart, 'endSeconds': videoEnd, 'suggestedQuality': 'hd720'};
 
-		function onYouTubeIframeAPIReady(){
-		  tv = new YT.Player('tv', {
-			  videoID: videoID,
-			  events: {'onReady': onPlayerReady},
-			  playerVars: {'autoplay': 1, 'playsinline': 1}
-		  });
+		function onYouTubePlayerAPIReady(){
+		  tv = new YT.Player('tv', {events: {'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange}, playerVars: playerDefaults});
 		}
 
-		function onPlayerReady(e){
-			tv.mute();
-			tv.playVideo();
+		function onPlayerReady(){
+		  tv.loadVideoById(vid);
+		  tv.mute();
+		}
+
+		function onPlayerStateChange(e) {
+		  if (e.data === 1){
+		    $('#tv').addClass('active');
+		  } else if (e.data === 0){
+		    tv.seekTo(vid.startSeconds)
+		  }
 		}
 
 		function vidRescale(){
@@ -465,19 +469,6 @@
 		    $('.tv .screen').css({'left': -($('.tv .screen').outerWidth()-w)/2});
 		  }
 		}
-
-		// $(document).ready(function () {
-		// 	//appends an "active" class to .popup and .popup-content when the "Open" button is clicked
-		// 	$(".video-expand").on("click", function() {
-		// 	  $(".popup-overlay, .popup-content").addClass("active");
-		// 	});
-
-		// 	//removes the "active" class to .popup and .popup-content when the "Close" button is clicked 
-		// 	$(".close, .popup-overlay").on("click", function() {
-		// 	  $(".popup-overlay, .popup-content").removeClass("active");
-		// 	});
-		// });
-
 		$(window).on('load resize', function(){
 		  vidRescale();
 		});
