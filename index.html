@@ -430,6 +430,8 @@
 
 		    $(window).resize(function () { fitVideo(); });
 		    $(window).trigger('resize');
+			$(window).load(function () { fitVideo(); });
+			$(window).trigger('load');
 
 		});
 
