@@ -165,8 +165,6 @@
 			.fullsize-video-bg:after { content: ""; background-color: #00000050; background-size: 3px 3px; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
 
 
-			.fullsize-video-bg .inner { display: table; width: 100%; max-width: 24em; height: 100%; margin: 0 auto; padding: 0; position: relative; z-index: 2; text-shadow: 0 1px 5px rgba(0,0,0,.5); }
-			.fullsize-video-bg .inner > div { text-align: center; display: table-cell; vertical-align: middle; padding: 0 2em; }
 		</style>
 		<video class="video-adaptive" width="1920" height="720" autoplay muted loop playsinline>
 		  <source src="assets/img/video.mp4" type="video/mp4">
@@ -459,7 +457,7 @@
 		    $('.video-adaptive').width(scale * vid_w_orig);
 		    $('.video-adaptive').height(scale * vid_h_orig);
 
-		    $('.video-adaptive').scrollLeft(($('.video-adaptive').width() - $('.fullsize-video-bg').width()) / 2);
+		    $('.video-adaptive').scrollRight(($('.video-adaptive').width() - $('.fullsize-video-bg').width()) / 2);
 		    $('.video-adaptive').scrollTop(($('.video-adaptive').height() - $('.fullsize-video-bg').height()) / 2);
 
 		};
