@@ -430,14 +430,10 @@
 
 		    $(window).resize(function () { fitVideo(); });
 		    $(window).trigger('resize');
-			$(window).load(function () { fitVideo(); });
-			$(window).trigger('load');
 
 		});
 
 		function fitVideo() {
-			
-			console.log('ezdi');
 
 		    $('#video-viewport').width($('.fullsize-video-bg').width());
 		    $('#video-viewport').height($('.fullsize-video-bg').height());
