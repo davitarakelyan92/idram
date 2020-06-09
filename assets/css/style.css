@@ -98,6 +98,11 @@ ul li a:hover{
 	color: #f5821e;
 	text-decoration: initial;
 }
+svg{
+	width: 146px;
+}
+svg .st0{fill:#ffffff;stroke:#ffffff;stroke-width:0.2148;stroke-miterlimit:3.3558;}
+svg .st1{fill:#333333;}
 .video_wrap{
 	position: relative;
 	width: 100%;
@@ -580,11 +585,12 @@ h2.light-text{
 }
 
 .video-overlay {
-  height: 100%;
-  opacity: .8;
-  position: absolute;
-  width: 100%;
-  z-index: 2;
+	background-color: #000; 
+	opacity: .50;
+	height: 100%;
+	position: absolute;
+	width: 100%;
+	z-index: 2;
 }
 
 .video-expand {
@@ -664,7 +670,7 @@ h2.light-text{
   left: 0;
   z-index: 1;
   margin: auto;
-  opacity: 0;
+  opacity: 1;
   transition: opacity .5s;
 }
 .tv .screen.active {
@@ -775,6 +781,12 @@ h2.light-text{
 }
 .dark{
 	display: none;
+}
+div#header.sticky svg .st1{
+	fill:#333333;
+}
+div#header.sticky svg .st0{
+	fill:#F37425;stroke:#F37425;
 }
 div#header.sticky #menu-item div{
 	background-color: #f5821e;
@@ -1295,7 +1307,7 @@ text-decoration: none;
 	}
 
 	.report {
-		 overflow-x: unset;
+		 overflow-x: auto;
 	}
 	.cover h2{
 		font-size: 32px;
