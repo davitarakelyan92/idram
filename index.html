@@ -424,12 +424,12 @@
 		    h = $(window).height() + 100;
 		  if (w/h > 16/9){
 			  $('.video-adaptive').width(w);
-			  $('.video-adaptive').height(w/16*9);
-// 		    $('.fullsize-video-bg').css({'left': '0px'});
+			  $('.video-adaptive').height(w/24*9);
+		    $('.fullsize-video-bg').css({'left': '0px'});
 		  } else {
-			   $('.video-adaptive').width(h/9*16);
+			   $('.video-adaptive').width(h/9*24);
 			  $('.video-adaptive').height(h);
-// 		    $('.fullsize-video-bg').css({'left': -($('.fullsize-video-bg').outerWidth()-w)/2});
+		    $('.fullsize-video-bg').css({'left': -($('.fullsize-video-bg').outerWidth()-w)/2});
 		  }
 		}
 		$(window).on('load resize', function(){
